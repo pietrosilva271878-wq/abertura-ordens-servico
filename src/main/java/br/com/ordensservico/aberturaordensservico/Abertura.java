@@ -4,10 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AberturaordensservicoApplication {
+public class Abertura {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AberturaordensservicoApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(Abertura.class, args);
+    }
 }
