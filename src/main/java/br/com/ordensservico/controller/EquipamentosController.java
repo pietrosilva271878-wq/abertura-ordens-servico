@@ -1,12 +1,10 @@
 package br.com.ordensservico.controller;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,143 +12,107 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import br.com.ordensservico.model.Equipamentos;
 import br.com.ordensservico.service.EquipamentosService;
-
 
 @RestController
 @RequestMapping("/equipamentos")
 public class EquipamentosController {
 
-    private final EquipamentosService EquipamentosService;
+    private final EquipamentosService equipamentosService;
 
-
-    public EquipamentosController(
-            EquipamentosService EquipamentosService) {
-
-        this.EquipamentosService =
-                EquipamentosService;
+    public EquipamentosController(EquipamentosService equipamentosService) {
+        this.equipamentosService = equipamentosService;
     }
-
 
     // ==========================
     // CADASTRAR
+    // POST /equipamentos
     // ==========================
 
     @PostMapping
     public ResponseEntity<Equipamentos> cadastrar(
-            @RequestBody Equipamentos Equipamentos) {
+            @RequestBody Equipamentos equipamento) {
 
-        Equipamentos novoEquipamentos =
-                EquipamentosService.cadastrar(Equipamentos);
-
+        Equipamentos novoEquipamento =
+                equipamentosService.cadastrar(equipamento);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(novoEquipamentos);
+                .body(novoEquipamento);
     }
-
 
     // ==========================
     // LISTAR
+    // GET /equipamentos
     // ==========================
 
     @GetMapping
     public ResponseEntity<List<Equipamentos>> listar() {
 
-        return ResponseEntity.ok(
-                EquipamentosService.listar()
-        );
-    }
+        List<Equipamentos> equipamentos =
+                equipamentosService.listar();
 
+        return ResponseEntity.ok(equipamentos);
+    }
 
     // ==========================
     // BUSCAR POR ID
+    // GET /equipamentos/{id}
     // ==========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Equipamentos> buscarPorId(
             @PathVariable Integer id) {
 
+        Optional<Equipamentos> equipamento =
+                equipamentosService.buscarPorId(id);
 
-        Optional<Equipamentos> Equipamentos =
-                EquipamentosService.buscarPorId(id);
-
-
-        if (Equipamentos.isEmpty()) {
-
-            return ResponseEntity
-                    .notFound()
-                    .build();
+        if (equipamento.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
 
-
-        return ResponseEntity.ok(
-                Equipamentos.get()
-        );
+        return ResponseEntity.ok(equipamento.get());
     }
-
 
     // ==========================
     // ATUALIZAR
+    // PUT /equipamentos/{id}
     // ==========================
 
     @PutMapping("/{id}")
     public ResponseEntity<Equipamentos> atualizar(
             @PathVariable Integer id,
-            @RequestBody Equipamentos Equipamentos) {
-
+            @RequestBody Equipamentos equipamento) {
 
         Optional<Equipamentos> atualizado =
-                EquipamentosService.atualizar(
-                        id,
-                        Equipamentos
-                );
-
+                equipamentosService.atualizar(id, equipamento);
 
         if (atualizado.isEmpty()) {
-
-            return ResponseEntity
-                    .notFound()
-                    .build();
+            return ResponseEntity.notFound().build();
         }
 
-
-        return ResponseEntity.ok(
-                atualizado.get()
-        );
+        return ResponseEntity.ok(atualizado.get());
     }
 
-
     // ==========================
-    // EXCLUIR
+    // DELETAR
+    // DELETE /equipamentos/{id}
     // ==========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(
             @PathVariable Integer id) {
 
-
         boolean deletado =
-                EquipamentosService.deletar(id);
-
+                equipamentosService.deletar(id);
 
         if (!deletado) {
-
-            return ResponseEntity
-                    .notFound()
-                    .build();
+            return ResponseEntity.notFound().build();
         }
 
-
-        return ResponseEntity
-                .noContent()
-                .build();
-
-}
+        return ResponseEntity.noContent().build();
+    }
 }

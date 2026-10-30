@@ -1,8 +1,5 @@
 package br.com.ordensservico.model;
 
-
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,18 +15,18 @@ public class Equipamentos {
     private Integer id;
 
     private String nome;
-
+    private String numeroPatrimonio;
     private String categoria;
 
     private String descricao;
 
-    
 
-
+    // Construtor vazio
     public Equipamentos() {
     }
 
 
+    // GET e SET do ID
     public Integer getId() {
         return id;
     }
@@ -39,35 +36,21 @@ public class Equipamentos {
     }
 
 
-    public String getcategoria() {
-        return categoria;
-    }
-
-    public void setcategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-
-    public String getnome() {
+    // GET e SET do NOME
+    public String getNome() {
         return nome;
     }
 
- 
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
 
-    public String getDescricao() {
-        return descricao;
+     public String getNumeroPatrimonio(){
+        return numeroPatrimonio;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setNumeroPatrimonio(String numeroPatrimonio){
+        this.numeroPatrimonio = numeroPatrimonio;
     }
 }

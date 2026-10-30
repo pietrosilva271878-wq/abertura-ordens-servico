@@ -6,39 +6,45 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity 
-@Table (name = "setores")
+@Entity
+@Table(name = "setores")
 public class Setor {
-    @Id 
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+    private String numeroPatrimonio;
     private String nome;
-    
 
-    public Setor(){
+
+    // Construtor vazio obrigatório para o JPA
+    public Setor() {
     }
 
-    public Setor(String nome, String email){
+
+    // Construtor
+    public Setor(String nome) {
         this.nome = nome;
-        
     }
 
 
-    public  String getNome() {
+    // GET e SET do ID
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
+    // GET e SET do NOME
+    public String getNome() {
         return nome;
     }
 
-
-    public void  setNome(String nome){
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-
-    public int getId(){
-        return id;
-
-    }
-
-
-    
 }

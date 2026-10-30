@@ -17,21 +17,32 @@ public class SetorService {
         this.setorRepository = setorRepository;
     }
 
+
+    // CADASTRAR
     public Setor cadastrar(Setor setor) {
         return setorRepository.save(setor);
     }
 
+
+    // LISTAR
     public List<Setor> listar() {
         return setorRepository.findAll();
     }
 
+
+    // BUSCAR POR ID
     public Optional<Setor> buscarPorId(Integer id) {
         return setorRepository.findById(id);
     }
 
-    public Optional<Setor> atualizar(Integer id, Setor novosDados) {
 
-        Optional<Setor> setorEncontrado = setorRepository.findById(id);
+    // ATUALIZAR
+    public Optional<Setor> atualizar(
+            Integer id,
+            Setor novosDados) {
+
+        Optional<Setor> setorEncontrado =
+                setorRepository.findById(id);
 
         if (setorEncontrado.isEmpty()) {
             return Optional.empty();
@@ -40,18 +51,23 @@ public class SetorService {
         Setor setor = setorEncontrado.get();
 
         setor.setNome(novosDados.getNome());
-     ;
 
-        return Optional.of(setorRepository.save(setor));
+        Setor setorAtualizado =
+                setorRepository.save(setor);
+
+        return Optional.of(setorAtualizado);
     }
 
+
+    // DELETAR
     public boolean deletar(Integer id) {
 
-        if (setorRepository.existsById(id)) {
-            setorRepository.deleteById(id);
-            return true;
+        if (!setorRepository.existsById(id)) {
+            return false;
         }
 
-        return false;
+        setorRepository.deleteById(id);
+
+        return true;
     }
 }

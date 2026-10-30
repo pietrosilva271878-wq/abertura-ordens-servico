@@ -20,11 +20,20 @@ public class EquipamentosService {
     }
 
 
+    // ==========================
+    // CADASTRAR
+    // ==========================
+
     public Equipamentos cadastrar(
             Equipamentos equipamento) {
 
         return equipamentosRepository.save(equipamento);
     }
+
+
+    // ==========================
+    // LISTAR
+    // ==========================
 
     public List<Equipamentos> listar() {
 
@@ -32,11 +41,20 @@ public class EquipamentosService {
     }
 
 
+    // ==========================
+    // BUSCAR POR ID
+    // ==========================
+
     public Optional<Equipamentos> buscarPorId(
             Integer id) {
 
         return equipamentosRepository.findById(id);
     }
+
+
+    // ==========================
+    // ATUALIZAR
+    // ==========================
 
     public Optional<Equipamentos> atualizar(
             Integer id,
@@ -50,7 +68,8 @@ public class EquipamentosService {
         }
 
         Equipamentos equipamento = encontrado.get();
-
+        equipamento.setNumeroPatrimonio(novosDados.getNumeroPatrimonio());
+        equipamento.setNome(novosDados.getNome());
 
         Equipamentos salvo =
                 equipamentosRepository.save(equipamento);
@@ -59,7 +78,9 @@ public class EquipamentosService {
     }
 
 
-
+    // ==========================
+    // DELETAR
+    // ==========================
 
     public boolean deletar(
             Integer id) {
@@ -72,5 +93,6 @@ public class EquipamentosService {
 
         return true;
     }
+
 }
     

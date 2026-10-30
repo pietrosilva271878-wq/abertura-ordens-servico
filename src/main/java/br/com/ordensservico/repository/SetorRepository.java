@@ -1,4 +1,3 @@
-
 package br.com.ordensservico.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import br.com.ordensservico.model.Setor;
 
 @Repository
-public interface SetorRepository extends JpaRepository<Setor, Integer> {
+public interface SetorRepository
+        extends JpaRepository<Setor, Integer> {
 
 }
 
