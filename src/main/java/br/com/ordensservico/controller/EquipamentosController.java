@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ordensservico.model.Equipamentos;
 import br.com.ordensservico.service.EquipamentosService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/equipamentos")
@@ -27,14 +28,11 @@ public class EquipamentosController {
         this.equipamentosService = equipamentosService;
     }
 
-    // ==========================
     // CADASTRAR
     // POST /equipamentos
-    // ==========================
-
     @PostMapping
     public ResponseEntity<Equipamentos> cadastrar(
-            @RequestBody Equipamentos equipamento) {
+            @Valid @RequestBody Equipamentos equipamento) {
 
         Equipamentos novoEquipamento =
                 equipamentosService.cadastrar(equipamento);
@@ -44,11 +42,8 @@ public class EquipamentosController {
                 .body(novoEquipamento);
     }
 
-    // ==========================
     // LISTAR
     // GET /equipamentos
-    // ==========================
-
     @GetMapping
     public ResponseEntity<List<Equipamentos>> listar() {
 
@@ -58,11 +53,8 @@ public class EquipamentosController {
         return ResponseEntity.ok(equipamentos);
     }
 
-    // ==========================
     // BUSCAR POR ID
     // GET /equipamentos/{id}
-    // ==========================
-
     @GetMapping("/{id}")
     public ResponseEntity<Equipamentos> buscarPorId(
             @PathVariable Integer id) {
@@ -77,15 +69,12 @@ public class EquipamentosController {
         return ResponseEntity.ok(equipamento.get());
     }
 
-    // ==========================
     // ATUALIZAR
     // PUT /equipamentos/{id}
-    // ==========================
-
     @PutMapping("/{id}")
     public ResponseEntity<Equipamentos> atualizar(
             @PathVariable Integer id,
-            @RequestBody Equipamentos equipamento) {
+            @Valid @RequestBody Equipamentos equipamento) {
 
         Optional<Equipamentos> atualizado =
                 equipamentosService.atualizar(id, equipamento);
@@ -97,11 +86,8 @@ public class EquipamentosController {
         return ResponseEntity.ok(atualizado.get());
     }
 
-    // ==========================
     // DELETAR
     // DELETE /equipamentos/{id}
-    // ==========================
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(
             @PathVariable Integer id) {

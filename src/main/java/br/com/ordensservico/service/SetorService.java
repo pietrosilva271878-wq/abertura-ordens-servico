@@ -17,24 +17,20 @@ public class SetorService {
         this.setorRepository = setorRepository;
     }
 
-
     // CADASTRAR
     public Setor cadastrar(Setor setor) {
         return setorRepository.save(setor);
     }
-
 
     // LISTAR
     public List<Setor> listar() {
         return setorRepository.findAll();
     }
 
-
     // BUSCAR POR ID
     public Optional<Setor> buscarPorId(Integer id) {
         return setorRepository.findById(id);
     }
-
 
     // ATUALIZAR
     public Optional<Setor> atualizar(
@@ -52,12 +48,10 @@ public class SetorService {
 
         setor.setNome(novosDados.getNome());
 
-        Setor setorAtualizado =
-                setorRepository.save(setor);
-
-        return Optional.of(setorAtualizado);
+        return Optional.of(
+                setorRepository.save(setor)
+        );
     }
-
 
     // DELETAR
     public boolean deletar(Integer id) {

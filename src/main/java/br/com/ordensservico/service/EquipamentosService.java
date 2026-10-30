@@ -6,30 +6,40 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.ordensservico.model.Equipamentos;
+import br.com.ordensservico.model.Setor;
 import br.com.ordensservico.repository.EquipamentosRepository;
+import br.com.ordensservico.repository.SetorRepository;
 
 @Service
 public class EquipamentosService {
 
     private final EquipamentosRepository equipamentosRepository;
+    private final SetorRepository setorRepository;
 
     public EquipamentosService(
-            EquipamentosRepository equipamentosRepository) {
+            EquipamentosRepository equipamentosRepository,
+            SetorRepository setorRepository) {
 
         this.equipamentosRepository = equipamentosRepository;
+        this.setorRepository = setorRepository;
     }
-
 
     // ==========================
     // CADASTRAR
     // ==========================
 
-    public Equipamentos cadastrar(
-            Equipamentos equipamento) {
+    public Equipamentos cadastrar(Equipamentos equipamento) {
+
+        Integer setorId = equipamento.getSetor().getId();
+
+        Setor setor = setorRepository.findById(setorId)
+                .orElseThrow(() ->
+                        new RuntimeException("Setor não encontrado"));
+
+        equipamento.setSetor(setor);
 
         return equipamentosRepository.save(equipamento);
     }
-
 
     // ==========================
     // LISTAR
@@ -40,17 +50,14 @@ public class EquipamentosService {
         return equipamentosRepository.findAll();
     }
 
-
     // ==========================
     // BUSCAR POR ID
     // ==========================
 
-    public Optional<Equipamentos> buscarPorId(
-            Integer id) {
+    public Optional<Equipamentos> buscarPorId(Integer id) {
 
         return equipamentosRepository.findById(id);
     }
-
 
     // ==========================
     // ATUALIZAR
@@ -68,8 +75,24 @@ public class EquipamentosService {
         }
 
         Equipamentos equipamento = encontrado.get();
-        equipamento.setNumeroPatrimonio(novosDados.getNumeroPatrimonio());
+
+        // Atualiza nome
         equipamento.setNome(novosDados.getNome());
+
+        // Atualiza patrimônio
+        equipamento.setNumeroPatrimonio(
+                novosDados.getNumeroPatrimonio()
+        );
+
+        // Busca o setor informado
+        Integer setorId = novosDados.getSetor().getId();
+
+        Setor setor = setorRepository.findById(setorId)
+                .orElseThrow(() ->
+                        new RuntimeException("Setor não encontrado"));
+
+        // Atualiza o setor
+        equipamento.setSetor(setor);
 
         Equipamentos salvo =
                 equipamentosRepository.save(equipamento);
@@ -77,13 +100,11 @@ public class EquipamentosService {
         return Optional.of(salvo);
     }
 
-
     // ==========================
     // DELETAR
     // ==========================
 
-    public boolean deletar(
-            Integer id) {
+    public boolean deletar(Integer id) {
 
         if (!equipamentosRepository.existsById(id)) {
             return false;
@@ -93,6 +114,5 @@ public class EquipamentosService {
 
         return true;
     }
-
 }
     

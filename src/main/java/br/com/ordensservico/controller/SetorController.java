@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ordensservico.model.Setor;
 import br.com.ordensservico.service.SetorService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/setores")
@@ -27,42 +28,31 @@ public class SetorController {
         this.setorService = setorService;
     }
 
-    // ==========================
     // CADASTRAR
     // POST /setores
-    // ==========================
-
     @PostMapping
     public ResponseEntity<Setor> cadastrar(
-            @RequestBody Setor setor) {
+            @Valid @RequestBody Setor setor) {
 
-        Setor setorCadastrado =
-                setorService.cadastrar(setor);
+        Setor setorCadastrado = setorService.cadastrar(setor);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(setorCadastrado);
     }
 
-    // ==========================
     // LISTAR
     // GET /setores
-    // ==========================
-
     @GetMapping
     public ResponseEntity<List<Setor>> listar() {
 
-        List<Setor> setores =
-                setorService.listar();
+        List<Setor> setores = setorService.listar();
 
         return ResponseEntity.ok(setores);
     }
 
-    // ==========================
     // BUSCAR POR ID
     // GET /setores/{id}
-    // ==========================
-
     @GetMapping("/{id}")
     public ResponseEntity<Setor> buscarPorId(
             @PathVariable Integer id) {
@@ -71,63 +61,41 @@ public class SetorController {
                 setorService.buscarPorId(id);
 
         if (setorOptional.isPresent()) {
-            return ResponseEntity.ok(
-                    setorOptional.get()
-            );
+            return ResponseEntity.ok(setorOptional.get());
         }
 
-        return ResponseEntity
-                .notFound()
-                .build();
+        return ResponseEntity.notFound().build();
     }
 
-    // ==========================
     // ATUALIZAR
     // PUT /setores/{id}
-    // ==========================
-
     @PutMapping("/{id}")
     public ResponseEntity<Setor> atualizar(
             @PathVariable Integer id,
-            @RequestBody Setor novosDados) {
+            @Valid @RequestBody Setor novosDados) {
 
         Optional<Setor> setorOptional =
-                setorService.atualizar(
-                        id,
-                        novosDados
-                );
+                setorService.atualizar(id, novosDados);
 
         if (setorOptional.isPresent()) {
-            return ResponseEntity.ok(
-                    setorOptional.get()
-            );
+            return ResponseEntity.ok(setorOptional.get());
         }
 
-        return ResponseEntity
-                .notFound()
-                .build();
+        return ResponseEntity.notFound().build();
     }
 
-    // ==========================
     // DELETAR
     // DELETE /setores/{id}
-    // ==========================
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(
             @PathVariable Integer id) {
 
-        boolean deletado =
-                setorService.deletar(id);
+        boolean deletado = setorService.deletar(id);
 
         if (deletado) {
-            return ResponseEntity
-                    .noContent()
-                    .build();
+            return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity
-                .notFound()
-                .build();
+        return ResponseEntity.notFound().build();
     }
 }

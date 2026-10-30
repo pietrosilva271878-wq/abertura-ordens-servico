@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "setores")
@@ -12,10 +13,12 @@ public class Setor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String numeroPatrimonio;
+
+    @NotBlank (message = "O nome do setor é obrigatório")
     private String nome;
 
+    private Integer id;
+    
 
     // Construtor vazio obrigatório para o JPA
     public Setor() {
