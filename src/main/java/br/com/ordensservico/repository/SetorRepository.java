@@ -10,4 +10,3 @@ public interface SetorRepository
         extends JpaRepository<Setor, Integer> {
 
 }
-

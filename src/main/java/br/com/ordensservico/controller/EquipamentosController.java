@@ -5,14 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.ordensservico.model.Equipamentos;
 import br.com.ordensservico.service.EquipamentosService;
@@ -24,12 +17,12 @@ public class EquipamentosController {
 
     private final EquipamentosService equipamentosService;
 
-    public EquipamentosController(EquipamentosService equipamentosService) {
+    public EquipamentosController(
+            EquipamentosService equipamentosService) {
+
         this.equipamentosService = equipamentosService;
     }
 
-    // CADASTRAR
-    // POST /equipamentos
     @PostMapping
     public ResponseEntity<Equipamentos> cadastrar(
             @Valid @RequestBody Equipamentos equipamento) {
@@ -42,19 +35,14 @@ public class EquipamentosController {
                 .body(novoEquipamento);
     }
 
-    // LISTAR
-    // GET /equipamentos
     @GetMapping
     public ResponseEntity<List<Equipamentos>> listar() {
 
-        List<Equipamentos> equipamentos =
-                equipamentosService.listar();
-
-        return ResponseEntity.ok(equipamentos);
+        return ResponseEntity.ok(
+                equipamentosService.listar()
+        );
     }
 
-    // BUSCAR POR ID
-    // GET /equipamentos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Equipamentos> buscarPorId(
             @PathVariable Integer id) {
@@ -69,15 +57,16 @@ public class EquipamentosController {
         return ResponseEntity.ok(equipamento.get());
     }
 
-    // ATUALIZAR
-    // PUT /equipamentos/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Equipamentos> atualizar(
             @PathVariable Integer id,
             @Valid @RequestBody Equipamentos equipamento) {
 
         Optional<Equipamentos> atualizado =
-                equipamentosService.atualizar(id, equipamento);
+                equipamentosService.atualizar(
+                        id,
+                        equipamento
+                );
 
         if (atualizado.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -86,8 +75,6 @@ public class EquipamentosController {
         return ResponseEntity.ok(atualizado.get());
     }
 
-    // DELETAR
-    // DELETE /equipamentos/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(
             @PathVariable Integer id) {
