@@ -5,17 +5,11 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.ordensservico.model.Setor;
 import br.com.ordensservico.service.SetorService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/setores")
@@ -27,107 +21,66 @@ public class SetorController {
         this.setorService = setorService;
     }
 
-    // ==========================
-    // CADASTRAR
-    // POST /setores
-    // ==========================
-
     @PostMapping
     public ResponseEntity<Setor> cadastrar(
-            @RequestBody Setor setor) {
+            @Valid @RequestBody Setor setor) {
 
-        Setor setorCadastrado =
+        Setor novoSetor =
                 setorService.cadastrar(setor);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(setorCadastrado);
+                .body(novoSetor);
     }
-
-    // ==========================
-    // LISTAR
-    // GET /setores
-    // ==========================
 
     @GetMapping
     public ResponseEntity<List<Setor>> listar() {
 
-        List<Setor> setores =
-                setorService.listar();
-
-        return ResponseEntity.ok(setores);
+        return ResponseEntity.ok(
+                setorService.listar()
+        );
     }
-
-    // ==========================
-    // BUSCAR POR ID
-    // GET /setores/{id}
-    // ==========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Setor> buscarPorId(
             @PathVariable Integer id) {
 
-        Optional<Setor> setorOptional =
+        Optional<Setor> setor =
                 setorService.buscarPorId(id);
 
-        if (setorOptional.isPresent()) {
-            return ResponseEntity.ok(
-                    setorOptional.get()
-            );
+        if (setor.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity
-                .notFound()
-                .build();
+        return ResponseEntity.ok(setor.get());
     }
-
-    // ==========================
-    // ATUALIZAR
-    // PUT /setores/{id}
-    // ==========================
 
     @PutMapping("/{id}")
     public ResponseEntity<Setor> atualizar(
             @PathVariable Integer id,
-            @RequestBody Setor novosDados) {
+            @Valid @RequestBody Setor setor) {
 
-        Optional<Setor> setorOptional =
-                setorService.atualizar(
-                        id,
-                        novosDados
-                );
+        Optional<Setor> atualizado =
+                setorService.atualizar(id, setor);
 
-        if (setorOptional.isPresent()) {
-            return ResponseEntity.ok(
-                    setorOptional.get()
-            );
+        if (atualizado.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity
-                .notFound()
-                .build();
+        return ResponseEntity.ok(atualizado.get());
     }
 
-    // ==========================
-    // DELETAR
-    // DELETE /setores/{id}
-    // ==========================
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(
+    public ResponseEntity<Void> deletar(
             @PathVariable Integer id) {
 
         boolean deletado =
                 setorService.deletar(id);
 
-        if (deletado) {
-            return ResponseEntity
-                    .noContent()
-                    .build();
+        if (!deletado) {
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity
-                .notFound()
-                .build();
+        return ResponseEntity.noContent().build();
     }
 }

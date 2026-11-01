@@ -17,49 +17,38 @@ public class SetorService {
         this.setorRepository = setorRepository;
     }
 
-
-    // CADASTRAR
     public Setor cadastrar(Setor setor) {
         return setorRepository.save(setor);
     }
 
-
-    // LISTAR
     public List<Setor> listar() {
         return setorRepository.findAll();
     }
 
-
-    // BUSCAR POR ID
     public Optional<Setor> buscarPorId(Integer id) {
         return setorRepository.findById(id);
     }
 
-
-    // ATUALIZAR
     public Optional<Setor> atualizar(
             Integer id,
             Setor novosDados) {
 
-        Optional<Setor> setorEncontrado =
+        Optional<Setor> encontrado =
                 setorRepository.findById(id);
 
-        if (setorEncontrado.isEmpty()) {
+        if (encontrado.isEmpty()) {
             return Optional.empty();
         }
 
-        Setor setor = setorEncontrado.get();
+        Setor setor = encontrado.get();
 
         setor.setNome(novosDados.getNome());
 
-        Setor setorAtualizado =
-                setorRepository.save(setor);
+        Setor salvo = setorRepository.save(setor);
 
-        return Optional.of(setorAtualizado);
+        return Optional.of(salvo);
     }
 
-
-    // DELETAR
     public boolean deletar(Integer id) {
 
         if (!setorRepository.existsById(id)) {

@@ -6,55 +6,45 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.ordensservico.model.Equipamentos;
+import br.com.ordensservico.model.Setor;
 import br.com.ordensservico.repository.EquipamentosRepository;
+import br.com.ordensservico.repository.SetorRepository;
 
 @Service
 public class EquipamentosService {
 
     private final EquipamentosRepository equipamentosRepository;
+    private final SetorRepository setorRepository;
 
     public EquipamentosService(
-            EquipamentosRepository equipamentosRepository) {
+            EquipamentosRepository equipamentosRepository,
+            SetorRepository setorRepository) {
 
         this.equipamentosRepository = equipamentosRepository;
+        this.setorRepository = setorRepository;
     }
 
+    public Equipamentos cadastrar(Equipamentos equipamento) {
 
-    // ==========================
-    // CADASTRAR
-    // ==========================
+        Integer setorId = equipamento.getSetor().getId();
 
-    public Equipamentos cadastrar(
-            Equipamentos equipamento) {
+        Setor setor = setorRepository
+                .findById(setorId)
+                .orElseThrow(() ->
+                        new RuntimeException("Setor não encontrado"));
+
+        equipamento.setSetor(setor);
 
         return equipamentosRepository.save(equipamento);
     }
 
-
-    // ==========================
-    // LISTAR
-    // ==========================
-
     public List<Equipamentos> listar() {
-
         return equipamentosRepository.findAll();
     }
 
-
-    // ==========================
-    // BUSCAR POR ID
-    // ==========================
-
-    public Optional<Equipamentos> buscarPorId(
-            Integer id) {
-
+    public Optional<Equipamentos> buscarPorId(Integer id) {
         return equipamentosRepository.findById(id);
     }
-
-
-    // ==========================
-    // ATUALIZAR
-    // ==========================
 
     public Optional<Equipamentos> atualizar(
             Integer id,
@@ -68,8 +58,28 @@ public class EquipamentosService {
         }
 
         Equipamentos equipamento = encontrado.get();
-        equipamento.setNumeroPatrimonio(novosDados.getNumeroPatrimonio());
-        equipamento.setNome(novosDados.getNome());
+
+        Integer setorId =
+                novosDados.getSetor().getId();
+
+        Optional<Setor> setor =
+                setorRepository.findById(setorId);
+
+        if (setor.isEmpty()) {
+            return Optional.empty();
+        }
+
+        equipamento.setNome(
+                novosDados.getNome()
+        );
+
+        equipamento.setNumeroPatrimonio(
+                novosDados.getNumeroPatrimonio()
+        );
+
+        equipamento.setSetor(
+                setor.get()
+        );
 
         Equipamentos salvo =
                 equipamentosRepository.save(equipamento);
@@ -77,13 +87,7 @@ public class EquipamentosService {
         return Optional.of(salvo);
     }
 
-
-    // ==========================
-    // DELETAR
-    // ==========================
-
-    public boolean deletar(
-            Integer id) {
+    public boolean deletar(Integer id) {
 
         if (!equipamentosRepository.existsById(id)) {
             return false;
@@ -93,6 +97,4 @@ public class EquipamentosService {
 
         return true;
     }
-
 }
-    
