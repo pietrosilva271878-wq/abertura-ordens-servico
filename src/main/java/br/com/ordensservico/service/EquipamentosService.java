@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.ordensservico.model.Equipamentos;
+import br.com.ordensservico.dto.EquipamentosDTO;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 import br.com.ordensservico.model.Setor;
 import br.com.ordensservico.repository.EquipamentosRepository;
 import br.com.ordensservico.repository.SetorRepository;
@@ -28,14 +31,17 @@ public class EquipamentosService {
     // CADASTRAR
     // ==========================
 
-    public Equipamentos cadastrar(Equipamentos equipamento) {
+    public Equipamentos cadastrar(EquipamentosDTO dados) {
 
-        Integer setorId = equipamento.getSetor().getId();
+        Integer setorId = dados.getSetorId();
 
         Setor setor = setorRepository.findById(setorId)
                 .orElseThrow(() ->
-                        new RuntimeException("Setor não encontrado"));
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor não encontrado"));
 
+        Equipamentos equipamento = new Equipamentos();
+        equipamento.setNome(dados.getNome());
+        equipamento.setNumeroPatrimonio(dados.getNumeroPatrimonio());
         equipamento.setSetor(setor);
 
         return equipamentosRepository.save(equipamento);
@@ -65,7 +71,7 @@ public class EquipamentosService {
 
     public Optional<Equipamentos> atualizar(
             Integer id,
-            Equipamentos novosDados) {
+            EquipamentosDTO novosDados) {
 
         Optional<Equipamentos> encontrado =
                 equipamentosRepository.findById(id);
@@ -85,11 +91,11 @@ public class EquipamentosService {
         );
 
         // Busca o setor informado
-        Integer setorId = novosDados.getSetor().getId();
+        Integer setorId = novosDados.getSetorId();
 
         Setor setor = setorRepository.findById(setorId)
                 .orElseThrow(() ->
-                        new RuntimeException("Setor não encontrado"));
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor não encontrado"));
 
         // Atualiza o setor
         equipamento.setSetor(setor);
