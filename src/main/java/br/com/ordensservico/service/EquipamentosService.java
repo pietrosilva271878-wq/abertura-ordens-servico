@@ -1,10 +1,14 @@
+
 package br.com.ordensservico.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
+import br.com.ordensservico.dto.EquipamentosDTO;
 import br.com.ordensservico.model.Equipamentos;
 import br.com.ordensservico.model.Setor;
 import br.com.ordensservico.repository.EquipamentosRepository;
@@ -24,31 +28,53 @@ public class EquipamentosService {
         this.setorRepository = setorRepository;
     }
 
-    public Equipamentos cadastrar(Equipamentos equipamento) {
+    // ==========================
+    // CADASTRAR
+    // ==========================
 
-        Integer setorId = equipamento.getSetor().getId();
+    public Equipamentos cadastrar(EquipamentosDTO dados) {
 
-        Setor setor = setorRepository
-                .findById(setorId)
+        Integer setorId = dados.getSetorId();
+
+        Setor setor = setorRepository.findById(setorId)
                 .orElseThrow(() ->
-                        new RuntimeException("Setor não encontrado"));
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Setor não encontrado"
+                        ));
 
+        Equipamentos equipamento = new Equipamentos();
+
+        equipamento.setNome(dados.getNome());
+        equipamento.setNumeroPatrimonio(dados.getNumeroPatrimonio());
         equipamento.setSetor(setor);
 
         return equipamentosRepository.save(equipamento);
     }
 
+    // ==========================
+    // LISTAR
+    // ==========================
+
     public List<Equipamentos> listar() {
         return equipamentosRepository.findAll();
     }
+
+    // ==========================
+    // BUSCAR POR ID
+    // ==========================
 
     public Optional<Equipamentos> buscarPorId(Integer id) {
         return equipamentosRepository.findById(id);
     }
 
+    // ==========================
+    // ATUALIZAR
+    // ==========================
+
     public Optional<Equipamentos> atualizar(
             Integer id,
-            Equipamentos novosDados) {
+            EquipamentosDTO novosDados) {
 
         Optional<Equipamentos> encontrado =
                 equipamentosRepository.findById(id);
@@ -59,33 +85,30 @@ public class EquipamentosService {
 
         Equipamentos equipamento = encontrado.get();
 
-        Integer setorId =
-                novosDados.getSetor().getId();
+        Integer setorId = novosDados.getSetorId();
 
-        Optional<Setor> setor =
-                setorRepository.findById(setorId);
+        Setor setor = setorRepository.findById(setorId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Setor não encontrado"
+                        ));
 
-        if (setor.isEmpty()) {
-            return Optional.empty();
-        }
-
-        equipamento.setNome(
-                novosDados.getNome()
-        );
-
+        equipamento.setNome(novosDados.getNome());
         equipamento.setNumeroPatrimonio(
                 novosDados.getNumeroPatrimonio()
         );
-
-        equipamento.setSetor(
-                setor.get()
-        );
+        equipamento.setSetor(setor);
 
         Equipamentos salvo =
                 equipamentosRepository.save(equipamento);
 
         return Optional.of(salvo);
     }
+
+    // ==========================
+    // DELETAR
+    // ==========================
 
     public boolean deletar(Integer id) {
 
@@ -98,3 +121,4 @@ public class EquipamentosService {
         return true;
     }
 }
+
