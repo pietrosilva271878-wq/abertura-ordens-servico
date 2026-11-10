@@ -13,25 +13,18 @@ public class Setor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @NotBlank (message = "O nome do setor é obrigatório")
+    @NotBlank(message = "O nome do setor é obrigatório")
     private String nome;
 
-    private Integer id;
-    
-
-    // Construtor vazio obrigatório para o JPA
     public Setor() {
     }
 
-
-    // Construtor
     public Setor(String nome) {
         this.nome = nome;
     }
 
-
-    // GET e SET do ID
     public Integer getId() {
         return id;
     }
@@ -40,8 +33,6 @@ public class Setor {
         this.id = id;
     }
 
-
-    // GET e SET do NOME
     public String getNome() {
         return nome;
     }
@@ -49,5 +40,4 @@ public class Setor {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
 }

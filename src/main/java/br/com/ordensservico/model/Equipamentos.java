@@ -21,7 +21,7 @@ public class Equipamentos {
     @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
-    @NotBlank(message = "O número do patrimônio é obrigatório")
+    @NotBlank(message = "O numero do patrimônio é obrigatório")
     private String numeroPatrimonio;
 
     @NotNull(message = "O setor é obrigatório")

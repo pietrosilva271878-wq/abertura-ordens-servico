@@ -1,14 +1,15 @@
+
 package br.com.ordensservico.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
-import br.com.ordensservico.model.Equipamentos;
-import br.com.ordensservico.dto.EquipamentosDTO;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import br.com.ordensservico.dto.EquipamentosDTO;
+import br.com.ordensservico.model.Equipamentos;
 import br.com.ordensservico.model.Setor;
 import br.com.ordensservico.repository.EquipamentosRepository;
 import br.com.ordensservico.repository.SetorRepository;
@@ -37,9 +38,13 @@ public class EquipamentosService {
 
         Setor setor = setorRepository.findById(setorId)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor não encontrado"));
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Setor não encontrado"
+                        ));
 
         Equipamentos equipamento = new Equipamentos();
+
         equipamento.setNome(dados.getNome());
         equipamento.setNumeroPatrimonio(dados.getNumeroPatrimonio());
         equipamento.setSetor(setor);
@@ -52,7 +57,6 @@ public class EquipamentosService {
     // ==========================
 
     public List<Equipamentos> listar() {
-
         return equipamentosRepository.findAll();
     }
 
@@ -61,7 +65,6 @@ public class EquipamentosService {
     // ==========================
 
     public Optional<Equipamentos> buscarPorId(Integer id) {
-
         return equipamentosRepository.findById(id);
     }
 
@@ -82,22 +85,19 @@ public class EquipamentosService {
 
         Equipamentos equipamento = encontrado.get();
 
-        // Atualiza nome
-        equipamento.setNome(novosDados.getNome());
-
-        // Atualiza patrimônio
-        equipamento.setNumeroPatrimonio(
-                novosDados.getNumeroPatrimonio()
-        );
-
-        // Busca o setor informado
         Integer setorId = novosDados.getSetorId();
 
         Setor setor = setorRepository.findById(setorId)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor não encontrado"));
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Setor não encontrado"
+                        ));
 
-        // Atualiza o setor
+        equipamento.setNome(novosDados.getNome());
+        equipamento.setNumeroPatrimonio(
+                novosDados.getNumeroPatrimonio()
+        );
         equipamento.setSetor(setor);
 
         Equipamentos salvo =
@@ -121,4 +121,4 @@ public class EquipamentosService {
         return true;
     }
 }
-    
+
