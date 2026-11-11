@@ -9,6 +9,7 @@ import br.com.ordensservico.model.Setor;
 @Repository
 public interface SetorRepository
         extends JpaRepository<Setor, Integer> {
+                
 
 }
 
